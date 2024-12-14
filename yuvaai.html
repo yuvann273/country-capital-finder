@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country and Capital Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            color: #4caf50;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #response {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Country and Capital Finder</h1>
+        <p>Enter a country name to find its capital:</p>
+        <input type="text" id="question" placeholder="Type a country name">
+        <button id="askButton">Search</button>
+        <div id="response"></div>
+    </div>
+    <script>
+        const countriesAndCapitals = {
+            "Afghanistan": "Kabul",
+            "Albania": "Tirana",
+            "Algeria": "Algiers",
+            "Andorra": "Andorra la Vella",
+            "Angola": "Luanda",
+            "Antigua and Barbuda": "Saint John's",
+            "Argentina": "Buenos Aires",
+            "Armenia": "Yerevan",
+            "Australia": "Canberra",
+            "Austria": "Vienna",
+            "Azerbaijan": "Baku",
+            "Bahamas": "Nassau",
+            "Bahrain": "Manama",
+            "Bangladesh": "Dhaka",
+            "Barbados": "Bridgetown",
+            "Belarus": "Minsk",
+            "Belgium": "Brussels",
+            "Belize": "Belmopan",
+            "Benin": "Porto-Novo",
+            "Bhutan": "Thimphu",
+            "Bolivia": "Sucre",
+            "Bosnia and Herzegovina": "Sarajevo",
+            "Botswana": "Gaborone",
+            "Brazil": "Brasília",
+            "Brunei": "Bandar Seri Begawan",
+            "Bulgaria": "Sofia",
+            "Burkina Faso": "Ouagadougou",
+            "Burundi": "Gitega",
+            "Cabo Verde": "Praia",
+            "Cambodia": "Phnom Penh",
+            "Cameroon": "Yaoundé",
+            "Canada": "Ottawa",
+            "Central African Republic": "Bangui",
+            "Chad": "N'Djamena",
+            "Chile": "Santiago",
+            "China": "Beijing",
+            "Colombia": "Bogotá",
+            "Comoros": "Moroni",
+            "Congo (Republic)": "Brazzaville",
+            "Congo (Democratic Republic)": "Kinshasa",
+            "Costa Rica": "San José",
+            "Croatia": "Zagreb",
+            "Cuba": "Havana",
+            "Cyprus": "Nicosia",
+            "Czech Republic": "Prague",
+            "Denmark": "Copenhagen",
+            "Djibouti": "Djibouti City",
+            "Dominica": "Roseau",
+            "Dominican Republic": "Santo Domingo",
+            "Ecuador": "Quito",
+            "Egypt": "Cairo",
+            "El Salvador": "San Salvador",
+            "Equatorial Guinea": "Malabo",
+            "Eritrea": "Asmara",
+            "Estonia": "Tallinn",
+            "Eswatini": "Mbabane",
+            "Ethiopia": "Addis Ababa",
+            "Fiji": "Suva",
+            "Finland": "Helsinki",
+            "France": "Paris",
+            "Gabon": "Libreville",
+            "Gambia": "Banjul",
+            "Georgia": "Tbilisi",
+            "Germany": "Berlin",
+            "Ghana": "Accra",
+            "Greece": "Athens",
+            "Grenada": "St. George's",
+            "Guatemala": "Guatemala City",
+            "Guinea": "Conakry",
+            "Guinea-Bissau": "Bissau",
+            "Guyana": "Georgetown",
+            "Haiti": "Port-au-Prince",
+            "Honduras": "Tegucigalpa",
+            "Hungary": "Budapest",
+            "Iceland": "Reykjavík",
+            "India": "New Delhi",
+            "Indonesia": "Jakarta",
+            "Iran": "Tehran",
+            "Iraq": "Baghdad",
+            "Ireland": "Dublin",
+            "Israel": "Jerusalem",
+            "Italy": "Rome",
+            "Jamaica": "Kingston",
+            "Japan": "Tokyo",
+            "Jordan": "Amman",
+            "Kazakhstan": "Astana",
+            "Kenya": "Nairobi",
+            "Kiribati": "South Tarawa",
+            "North Korea": "Pyongyang",
+            "South Korea": "Seoul",
+            "Kuwait": "Kuwait City",
+            "Kyrgyzstan": "Bishkek",
+            "Laos": "Vientiane",
+            "Latvia": "Riga",
+            "Lebanon": "Beirut",
+            "Lesotho": "Maseru",
+            "Liberia": "Monrovia",
+            "Libya": "Tripoli",
+            "Liechtenstein": "Vaduz",
+            "Lithuania": "Vilnius",
+            "Luxembourg": "Luxembourg City",
+            "Madagascar": "Antananarivo",
+            "Malawi": "Lilongwe",
+            "Malaysia": "Kuala Lumpur",
+            "Maldives": "Malé",
+            "Mali": "Bamako",
+            "Malta": "Valletta",
+            "Marshall Islands": "Majuro",
+            "Mauritania": "Nouakchott",
+            "Mauritius": "Port Louis",
+            "Mexico": "Mexico City",
+            "Micronesia": "Palikir",
+            "Moldova": "Chișinău",
+            "Monaco": "Monaco",
+            "Mongolia": "Ulaanbaatar",
+            "Montenegro": "Podgorica",
+            "Morocco": "Rabat",
+            "Mozambique": "Maputo",
+            "Myanmar": "Naypyidaw",
+            "Namibia": "Windhoek",
+            "Nauru": "Yaren",
+            "Nepal": "Kathmandu",
+            "Netherlands": "Amsterdam",
+            "New Zealand": "Wellington",
+            "Nicaragua": "Managua",
+            "Niger": "Niamey",
+            "Nigeria": "Abuja",
+            "North Macedonia": "Skopje",
+            "Norway": "Oslo",
+            "Oman": "Muscat",
+            "Pakistan": "Islamabad",
+            "Palau": "Ngerulmud",
+            "Panama": "Panama City",
+            "Papua New Guinea": "Port Moresby",
+            "Paraguay": "Asunción",
+            "Peru": "Lima",
+            "Philippines": "Manila",
+            "Poland": "Warsaw",
+            "Portugal": "Lisbon",
+            "Qatar": "Doha",
+            "Romania": "Bucharest",
+            "Russia": "Moscow",
+            "Rwanda": "Kigali",
+            "Saint Kitts and Nevis": "Basseterre",
+            "Saint Lucia": "Castries",
+            "Saint Vincent and the Grenadines": "Kingstown",
+            "Samoa": "Apia",
+            "San Marino": "San Marino",
+            "Sao Tome and Principe": "São Tomé",
+            "Saudi Arabia": "Riyadh",
+            "Senegal": "Dakar",
+            "Serbia": "Belgrade",
+            "Seychelles": "Victoria",
+            "Sierra Leone": "Freetown",
+            "Singapore": "Singapore",
+            "Slovakia": "Bratislava",
+            "Slovenia": "Ljubljana",
+            "Solomon Islands": "Honiara",
+            "Somalia": "Mogadishu",
+            "South Africa": "Pretoria",
+            "South Sudan": "Juba",
+            "Spain": "Madrid",
+            "Sri Lanka": "Sri Jayawardenepura Kotte",
+            "Sudan": "Khartoum",
+            "Suriname": "Paramaribo",
+            "Sweden": "Stockholm",
+            "Switzerland": "Bern",
+            "Syria": "Damascus",
+            "Taiwan": "Taipei",
+            "Tajikistan": "Dushanbe",
+            "Tanzania": "Dodoma",
+            "Thailand": "Bangkok",
+            "Timor-Leste": "Dili",
+            "Togo": "Lomé",
+            "Tonga": "Nuku'alofa",
+            "Trinidad and Tobago": "Port of Spain",
+            "Tunisia": "Tunis",
+            "Turkey": "Ankara",
+            "Turkmenistan": "Ashgabat",
+            "Tuvalu": "Funafuti",
+            "Uganda": "Kampala",
+            "Ukraine": "Kyiv",
+            "United Arab Emirates": "Abu Dhabi",
+            "United Kingdom": "London",
+            "United States": "Washington, D.C.",
+            "Uruguay": "Montevideo",
+            "Uzbekistan": "Tashkent",
+            "Vanuatu": "Port Vila",
+            "Vatican City": "Vatican City",
+            "Venezuela": "Caracas",
+            "Vietnam": "Hanoi",
+            "Yemen": "Sana'a",
+            "Zambia": "Lusaka",
+            "Zimbabwe": "Harare",
+         
+      };
+        document.getElementById("askButton").addEventListener("click", () => {
+        const input = document.getElementById("question").value.trim();
+        const responseDiv = document.getElementById("response");
+
+        if (input === "") {
+            responseDiv.textContent = "Please enter a country name.";
+            return;
+        }
+
+        // Case-insensitive search for the country
+        const country = Object.keys(countriesAndCapitals).find(
+            key => key.toLowerCase() === input.toLowerCase()
+        );
+
+        if (country) {
+            const capital = countriesAndCapitals[country];
+            responseDiv.textContent = `The capital of ${country} is ${capital}.`;
+        } else {
+            responseDiv.textContent = `Sorry, I couldn't find the capital for "${input}".`;
+        }
+    });
+</script>
+     
